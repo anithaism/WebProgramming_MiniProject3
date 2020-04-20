@@ -1,0 +1,102 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>Login Page</title>
+</head>
+
+<body>
+<div class="loginpage">
+
+<div id="mySidenav" class="sidenav">
+  <a href="index.html" id="home">Home</a>
+  <a href="about.php" id="about">About</a>
+  <a href="recipeindex.php" id="index">Recipe Index</a>
+  <a href="recipecategories.php" id="categories">Recipe Categories</a>
+  <a href="postquery.php" id="postquery">Post Query</a>
+</div>
+
+ <div class="transbox">
+
+    <p>Enter your account details</p>
+
+   <form method="post" action="<?=$_SERVER['PHP_SELF'];?>" class="formLayout">
+
+   <div class="formGroup">
+   <label>Username: </label>
+   <input type="text" name="username" class="textbox" autofocus required  
+                      placeholder="Username" title="Username" maxlength="20" pattern="[A-Za-z'-]{2,20}"  autofocus /><br>
+   </div>
+
+ <div class="formGroup">
+   <label>Email: </label>
+   <input type="email" name="email" class="textbox" required placeholder="Email" maxlength="50" />
+   </div>
+
+   <div class="formGroup">
+   <label>Password: </label>
+   <input type="password" name="password" placeholder="password" required /><br>
+    </div>
+
+  <div class="formGroup">
+   <label>Confirm Password: </label>
+   <input type="password" name="cpassword" placeholder="confirm password" required /><br>
+    </div>
+          
+   <div class="formGroup1">
+   <button type="submit" name="register" value="Register">Register</button>
+
+   <button type="cancel" name="cancel" value="Cancel">Cancel</button>
+   </div>
+
+   <p> Already a member? <a href="login.php">Login</a> here </p>
+   </form>
+  </div>
+
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+$name = $_POST['username'];
+$email = $_POST['email'];
+$pwd = $_POST['password'];
+$cpwd = $_POST['cpassword'];
+
+if ($pwd == $cpwd) {
+
+$con = mysqli_connect('localhost','asubramanian5','asubramanian5','asubramanian5');
+
+
+$sql = "SELECT * FROM Users WHERE Username ='$name' ";
+$records=mysqli_query($con,$sql);
+
+if(mysqli_num_rows($records) > 0)
+{
+  echo "<p class='emsg'>Username already exists! </p>";
+}
+
+else {
+$sql = "INSERT INTO Users (Username, Password, Email) VALUES ('$name', '$pwd', '$email')";
+
+if(mysqli_query($con, $sql)){
+  
+} 
+ echo "<p class='smsg'>Registration Successful! Go to Login !!</p>";
+}
+
+}
+else {
+echo "<p class='emsg'>Passwords didn't match!</p>";
+}
+
+
+mysqli_close($con);
+
+}
+?>
+
+
+</div>
+
+</body>
+</html>
